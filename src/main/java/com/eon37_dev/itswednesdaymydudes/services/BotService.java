@@ -79,7 +79,7 @@ public class BotService {
 
   public void addSticker(String sticker) {
     stickerService.save(new Sticker(null, sticker));
-    logger.info("Sticker added [{}]", stickerService.getAll());
+    logger.info("Sticker added [{}]", sticker);
   }
 
   public void testSend(long chatId, Bot bot) {

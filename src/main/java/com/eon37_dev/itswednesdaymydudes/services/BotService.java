@@ -33,7 +33,7 @@ public class BotService {
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
                   Welcome to its wednesday my dudes bot. Here are the list of commands:
-                  /setTimeToReceiveMessages - set time and your current UTC timezone [optional, default is UTC+0]
+                  /settimetoreceivemessages - set time and your current UTC timezone [optional, default is UTC+0]
                   (Format: [h]h:mm[+|-[h]h[:mm]] e.g. 15:30[+10[:45]]).
                 """);
 

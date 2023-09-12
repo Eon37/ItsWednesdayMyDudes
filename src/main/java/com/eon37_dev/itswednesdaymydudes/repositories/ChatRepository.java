@@ -12,7 +12,16 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-  @Query(value = "select * from chats c where abs(extract(epoch from(cast(:currentTime as timestamp with time zone) - cast(c.time_to_send as timestamp with time zone) + c.day_offset * INTERVAL '1' day))/60) < 3", nativeQuery = true)
+  @Query(nativeQuery = true, value = """
+          select * from chats c where abs(extract(epoch from(
+          cast(:currentTime as timestamp with time zone)
+          -\s
+          CASE\s
+            WHEN iso_day_of_week(current_date()) = 2 THEN cast(c.time_to_send as timestamp with time zone) + 1\s
+            WHEN iso_day_of_week(current_date()) = 3 THEN cast(c.time_to_send as timestamp with time zone)\s
+            WHEN iso_day_of_week(current_date()) = 4 THEN cast(c.time_to_send as timestamp with time zone) - 1\s
+          END
+          ))/60) < 1;""")
   List<Chat> findAllBetweenTime(OffsetTime currentTime);
   Optional<Chat> findByChatId(Long chatId);
   @Transactional

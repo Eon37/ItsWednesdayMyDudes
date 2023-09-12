@@ -21,7 +21,7 @@ public class WednesdayScheduler {
   private final Bot bot;
   private final StickerService stickerService;
   private final ChatService chatService;
-  @Scheduled(cron = "0 */15 * ? * TUE,WED,THU")
+  @Scheduled(cron = "0 * * ? * TUE,WED,THU")
   public void itsWednesdayMyDudes() {
     logger.info("Job started");
     chatService.getAllBetweenTime(OffsetTime.of(LocalTime.now(), OffsetDateTime.now().getOffset()))

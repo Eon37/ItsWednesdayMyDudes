@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class BotService {
+  private static final String INCORRECT_FORMAT_MESSAGE = "Incorrect format. Correct format: [h]h:mm[+|-[h]h[:mm]], values in [] are optional.\nExample: 15:30+3";
   private static final Logger logger = LoggerFactory.getLogger(BotService.class);
   private final ChatService chatService;
   private final StickerService stickerService;
@@ -33,15 +34,15 @@ public class BotService {
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
                   Welcome to its wednesday my dudes bot. Here are the list of commands:
-                  /settimetoreceivemessages - set time and your current UTC timezone [optional, default is UTC+0]
-                  (Format: [h]h:mm[+|-[h]h[:mm]] e.g. 15:30[+10[:45]]).
+                  /set_time - set the time to receive messages. Optionally you can set timezone (default is UTC+0)
+                  Format: [h]h:mm[+|-[h]h[:mm]] (e.g. 15:30+3).
                 """);
 
     sendMessage(sendMessage, bot);
   }
 
   public void setTimeToSendMessages(long chatId, String time, Bot bot) {
-    SendMessage errorMessage = new SendMessage(String.valueOf(chatId), "Incorrect format. Correct format: [h]h:mm[+|-[h]h[:mm]] e.g 15:30[+8[:45]]. Values in [] are optional");
+    SendMessage errorMessage = new SendMessage(String.valueOf(chatId), INCORRECT_FORMAT_MESSAGE);
 
     Matcher matcher = INPUT_TIME_PATTERN.matcher(time);
     if (matcher.matches()) {

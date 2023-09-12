@@ -36,7 +36,7 @@ public class Bot extends TelegramLongPollingBot {
 
       if (message.startsWith("/start")) {
         botService.start(chatId, this);
-      } else if (message.startsWith("/settimetoreceivemessages")) {
+      } else if (message.startsWith("/set_time")) {
         botService.setTimeToSendMessages(chatId, getCommandInput(message), this);
       } else if (message.startsWith("/addSticker")) {
         if (!adminChats.contains(update.getMessage().getChatId().toString())) return;

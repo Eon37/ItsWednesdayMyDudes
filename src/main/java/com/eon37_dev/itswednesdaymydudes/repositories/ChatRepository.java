@@ -12,18 +12,23 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
+  Optional<Chat> findByChatId(String chatId);
   @Query(nativeQuery = true, value = """
-          select * from chats c where abs(extract(epoch from(
-          cast(:currentTime as timestamp with time zone)
+          select\s
+              c.id,\s
+              TRIM(CHAR(0) FROM UTF8TOSTRING(DECRYPT('AES', HASH('SHA256', STRINGTOUTF8('${SECRET_KEY}'),1), c.chat_id))) as chat_id,\s
+              c.time_to_send,\s
+              c.day_offset\s
+          from chats c where abs(extract(epoch from(\s
+          cast(:currentTime as timestamp with time zone)\s
           -\s
           CASE\s
             WHEN iso_day_of_week(current_date()) = 2 THEN cast(c.time_to_send as timestamp with time zone) + 1\s
             WHEN iso_day_of_week(current_date()) = 3 THEN cast(c.time_to_send as timestamp with time zone)\s
             WHEN iso_day_of_week(current_date()) = 4 THEN cast(c.time_to_send as timestamp with time zone) - 1\s
-          END
+          END\s
           ))/60) < 1;""")
   List<Chat> findAllBetweenTime(OffsetTime currentTime);
-  Optional<Chat> findByChatId(Long chatId);
   @Transactional
-  void deleteByChatId(Long chatId);
+  void deleteByChatId(String chatId);
 }

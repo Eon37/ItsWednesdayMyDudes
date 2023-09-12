@@ -29,7 +29,7 @@ public class ChatService {
   }
 
   public Chat getByChatId(long chatId) {
-    return chatRepository.findByChatId(chatId).orElseThrow(() -> new NotFoundException("Chat does not exist"));
+    return chatRepository.findByChatId(String.valueOf(chatId)).orElseThrow(() -> new NotFoundException("Chat does not exist"));
   }
 
   public List<Chat> getAll() {
@@ -38,13 +38,11 @@ public class ChatService {
 
   public List<Chat> getAllBetweenTime(OffsetTime currentTime) {
     logger.info("currentTime [{}]", currentTime);
-    List<Chat> chats = chatRepository.findAllBetweenTime(currentTime);
-    logger.info(chats.toString());
-    return chats;
+    return chatRepository.findAllBetweenTime(currentTime);
   }
 
   public void delete(long chatId) {
-    chatRepository.deleteByChatId(chatId);
+    chatRepository.deleteByChatId(String.valueOf(chatId));
     logger.info("Chat removed");
   }
 }

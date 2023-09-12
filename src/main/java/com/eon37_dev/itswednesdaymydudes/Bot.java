@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
@@ -38,12 +39,16 @@ public class Bot extends TelegramLongPollingBot {
         botService.start(chatId, this);
       } else if (message.startsWith("/set_time")) {
         botService.setTimeToSendMessages(chatId, getCommandInput(message), this);
+      } else if (message.startsWith("/show_configs")) {
+        botService.showConfigsList(chatId, this);
       } else if (message.startsWith("/addSticker")) {
         if (!adminChats.contains(update.getMessage().getChatId().toString())) return;
         botService.addSticker(getCommandInput(message));
       } else if (message.startsWith("/testSend")) {
         if (!adminChats.contains(update.getMessage().getChatId().toString())) return;
         botService.testSend(chatId, this);
+      } else {
+        botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
       }
     }
   }

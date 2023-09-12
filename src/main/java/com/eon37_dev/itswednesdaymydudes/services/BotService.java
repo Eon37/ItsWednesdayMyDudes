@@ -34,8 +34,8 @@ public class BotService {
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
                   Welcome to its wednesday my dudes bot. Here are the list of commands:
-                  /set_time - set the time to receive messages. Optionally you can set timezone (default is UTC+0)
-                  Format: [h]h:mm[+|-[h]h[:mm]] (e.g. 15:30+3).
+                  /set_time - set the time to receive messages. Optionally you can set timezone (default is UTC+0). Format: [h]h:mm[+|-[h]h[:mm]] (e.g. 15:30+3).
+                  /show_configs - show current configurations
                 """);
 
     sendMessage(sendMessage, bot);
@@ -52,6 +52,8 @@ public class BotService {
         chat.setTimeToSend(offsetTime);
         chat.setDayOffset(calculateDayOffset(offsetTime));
         chatService.save(chat);
+        SendMessage msg = new SendMessage(String.valueOf(chatId), "Time set to: " + offsetTime);
+        sendMessage(msg, bot);
         logger.info("Time zone changed to [{}]", time);
       } catch (NotFoundException e) {
         logger.error("Chat not found", e);
@@ -76,6 +78,13 @@ public class BotService {
             .minusSeconds(userTime.getLong(ChronoField.OFFSET_SECONDS));
 
     return Integer.compare(odt.getDayOfMonth(), LocalDate.now().getDayOfMonth());
+  }
+
+  public void showConfigsList(long chatId, Bot bot) {
+    Chat chat = chatService.getByChatId(chatId);
+
+    SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "List of configs:\nTime to receive messages: " + chat.getTimeToSend());
+    sendMessage(sendMessage, bot);
   }
 
   public void addSticker(String sticker) {
@@ -112,7 +121,7 @@ public class BotService {
     }
   }
 
-  private void sendMessage(SendMessage sendMessage, Bot bot) {
+  public void sendMessage(SendMessage sendMessage, Bot bot) {
     try {
       bot.execute(sendMessage);
     } catch (TelegramApiException e) {

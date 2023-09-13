@@ -27,7 +27,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             WHEN iso_day_of_week(current_date()) = 3 THEN cast(c.time_to_send as timestamp with time zone)\s
             WHEN iso_day_of_week(current_date()) = 4 THEN cast(c.time_to_send as timestamp with time zone) - 1\s
           END\s
-          ))/60) < 1;""")
+          ))/60) < 0.5;""")
   List<Chat> findAllBetweenTime(OffsetTime currentTime);
   @Transactional
   void deleteByChatId(String chatId);

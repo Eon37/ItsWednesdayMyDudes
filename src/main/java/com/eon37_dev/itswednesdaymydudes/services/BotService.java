@@ -29,7 +29,7 @@ public class BotService {
 
   public void start(long chatId, Bot bot) {
     OffsetTime offsetTime = OffsetTime.of(LocalTime.of(10, 0), ZoneOffset.UTC);
-    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime, calculateDayOffset(offsetTime)));
+    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime));
     logger.info("Chat added");
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
@@ -50,7 +50,6 @@ public class BotService {
         Chat chat = chatService.getByChatId(chatId);
         OffsetTime offsetTime = extractZonedTime(matcher);
         chat.setTimeToSend(offsetTime);
-        chat.setDayOffset(calculateDayOffset(offsetTime));
         chatService.save(chat);
         SendMessage msg = new SendMessage(String.valueOf(chatId), "Time set to: " + offsetTime);
         sendMessage(msg, bot);
@@ -67,17 +66,6 @@ public class BotService {
     } else {
       sendMessage(errorMessage, bot);
     }
-  }
-
-  private static int calculateDayOffset(OffsetTime offsetTime) {
-    OffsetDateTime userTime = OffsetDateTime.of(LocalDate.now(), LocalTime.of(offsetTime.getHour(), offsetTime.getMinute()), offsetTime.getOffset());
-    ZoneOffset systemOffset = OffsetDateTime.now().getOffset();
-
-    OffsetDateTime odt = userTime
-            .plusSeconds(systemOffset.getLong(ChronoField.OFFSET_SECONDS))
-            .minusSeconds(userTime.getLong(ChronoField.OFFSET_SECONDS));
-
-    return Integer.compare(odt.getDayOfMonth(), LocalDate.now().getDayOfMonth());
   }
 
   public void showConfigsList(long chatId, Bot bot) {

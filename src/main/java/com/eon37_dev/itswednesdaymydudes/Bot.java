@@ -41,11 +41,17 @@ public class Bot extends TelegramLongPollingBot {
         botService.setTimeToSendMessages(chatId, getCommandInput(message), this);
       } else if (message.startsWith("/show_configs")) {
         botService.showConfigsList(chatId, this);
-      } else if (message.startsWith("/addSticker")) {
-        if (!adminChats.contains(update.getMessage().getChatId().toString())) return;
+      } else if (message.startsWith("/add_sticker")) {
+        if (!adminChats.contains(update.getMessage().getChatId().toString())) {
+          botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
+          return;
+        }
         botService.addSticker(getCommandInput(message));
-      } else if (message.startsWith("/testSend")) {
-        if (!adminChats.contains(update.getMessage().getChatId().toString())) return;
+      } else if (message.startsWith("/test_send")) {
+        if (!adminChats.contains(update.getMessage().getChatId().toString())) {
+          botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
+          return;
+        }
         botService.testSend(chatId, this);
       } else {
         botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);

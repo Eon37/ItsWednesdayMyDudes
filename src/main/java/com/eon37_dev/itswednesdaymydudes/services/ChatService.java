@@ -37,12 +37,15 @@ public class ChatService {
   }
 
   public List<Chat> getAllBetweenTime(OffsetTime currentTime) {
-    logger.info("currentTime [{}]", currentTime);
     return chatRepository.findAllBetweenTime(currentTime);
   }
 
   public void delete(long chatId) {
     chatRepository.deleteByChatId(String.valueOf(chatId));
     logger.info("Chat removed");
+  }
+
+  public long count() {
+    return chatRepository.count();
   }
 }

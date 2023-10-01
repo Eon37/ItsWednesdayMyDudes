@@ -53,6 +53,12 @@ public class Bot extends TelegramLongPollingBot {
           return;
         }
         botService.testSend(chatId, this);
+      } else if (message.startsWith("/stats")) {
+        if (!adminChats.contains(update.getMessage().getChatId().toString())) {
+          botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
+          return;
+        }
+        botService.getStats(chatId, this);
       } else {
         botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
       }

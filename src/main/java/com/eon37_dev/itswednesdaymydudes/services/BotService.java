@@ -87,6 +87,13 @@ public class BotService {
     }
   }
 
+  public void getStats(long chatId, Bot bot) {
+    long chatsCnt = chatService.count();
+
+    SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Stats:\nChats cnt: " + chatsCnt);
+    sendMessage(sendMessage, bot);
+  }
+
   private static OffsetTime extractZonedTime(Matcher matcher) {
     try {
       int hour = Integer.parseInt(matcher.group(1));

@@ -23,4 +23,5 @@ public class Chat {
           write = "ENCRYPT('AES', HASH('SHA256', STRINGTOUTF8('${SECRET_KEY}'), 1), STRINGTOUTF8(?))")
   private String chatId;
   private OffsetTime timeToSend;
+  private int dayOffset;
 }

@@ -28,7 +28,7 @@ public class BotService {
 
   public void start(long chatId, Bot bot) {
     OffsetTime offsetTime = OffsetTime.of(LocalTime.of(10, 0), ZoneOffset.UTC);
-    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime));
+    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime, 0));
     logger.info("Chat added");
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """

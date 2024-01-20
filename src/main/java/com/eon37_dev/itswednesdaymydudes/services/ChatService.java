@@ -40,8 +40,8 @@ public class ChatService {
     return chatRepository.findAllBetweenTime(currentTime);
   }
 
-  public void delete(long chatId) {
-    chatRepository.deleteByChatId(String.valueOf(chatId));
+  public void deleteById(long id) {
+    chatRepository.deleteById(id);
     logger.info("Chat removed");
   }
 

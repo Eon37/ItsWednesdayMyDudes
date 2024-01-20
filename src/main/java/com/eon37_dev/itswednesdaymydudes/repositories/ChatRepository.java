@@ -29,6 +29,4 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
           END\s
           ))/60) < 0.5;""")
   List<Chat> findAllBetweenTime(OffsetTime currentTime);
-  @Transactional
-  void deleteByChatId(String chatId);
 }

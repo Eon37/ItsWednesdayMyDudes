@@ -29,7 +29,7 @@ public class WednesdayScheduler {
               try {
                 stickerService.sendSticker(Long.parseLong(chat.getChatId()), bot);
               } catch (ChatInactiveException e) {
-                chatService.delete(chat.getId());
+                chatService.deleteById(chat.getId());
               }
             });
   }

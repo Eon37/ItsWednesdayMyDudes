@@ -27,6 +27,7 @@ public class WednesdayScheduler {
     chatService.getAllBetweenTime(OffsetTime.of(LocalTime.now(), OffsetDateTime.now().getOffset()))
             .forEach(chat -> {
               try {
+                logger.info("Sending to chat [{}]", chat.getChatId());
                 stickerService.sendSticker(Long.parseLong(chat.getChatId()), bot);
               } catch (ChatInactiveException e) {
                 chatService.deleteById(chat.getId());

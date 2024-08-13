@@ -34,6 +34,10 @@ public class StickerService {
     }
   }
 
+  public void deleteById(Long id) {
+    stickerRepository.deleteById(id);
+  }
+
   public Sticker getRandom() {
     Optional<Sticker> sticker = stickerRepository.findRandom();
     return sticker.orElse(new Sticker(null, DEFAULT_WEDNESDAY));

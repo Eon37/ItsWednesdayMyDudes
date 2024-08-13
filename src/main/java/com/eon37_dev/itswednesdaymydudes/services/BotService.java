@@ -28,7 +28,7 @@ public class BotService {
 
   public void start(long chatId, Bot bot) {
     OffsetTime offsetTime = OffsetTime.of(LocalTime.of(10, 0), ZoneOffset.UTC);
-    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime, 0));
+    chatService.save(new Chat(null, String.valueOf(chatId), offsetTime));
     logger.info("Chat added");
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
@@ -38,6 +38,12 @@ public class BotService {
                 """);
 
     sendMessage(sendMessage, bot);
+  }
+  public void deleteChatById(Long id) {
+    chatService.deleteById(id);
+  }
+  public void deleteStickerById(Long id) {
+    stickerService.deleteById(id);
   }
 
   public void setTimeToSendMessages(long chatId, String time, Bot bot) {

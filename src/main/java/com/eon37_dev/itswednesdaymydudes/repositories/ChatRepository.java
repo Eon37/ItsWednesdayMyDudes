@@ -17,8 +17,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
           select\s
               c.id,\s
               TRIM(CHAR(0) FROM UTF8TOSTRING(DECRYPT('AES', HASH('SHA256', STRINGTOUTF8('${SECRET_KEY}'),1), c.chat_id))) as chat_id,\s
-              c.time_to_send,\s
-              c.day_offset\s
+              c.time_to_send\s
           from chats c where abs(extract(epoch from(\s
           cast(:currentTime as timestamp with time zone)\s
           -\s

@@ -32,8 +32,9 @@ public class BotService {
     logger.info("Chat added");
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
-                  Welcome to its wednesday my dudes bot. Here are the list of commands:
-                  /set_time - set the time to receive messages. Optionally you can set timezone (default is UTC+0). Format: [h]h:mm[+|-[h]h[:mm]] (e.g. /set_time 15:30+3).
+                  Welcome to its wednesday my dudes bot. On wednesdays it will remind you, that it is already wednesday my dude. 
+                  Here are the list of commands:
+                  /set_time - set the time to receive messages. Optionally you can set timezone. Default is 10:00 UTC+0. Format: [h]h:mm[+|-[h]h[:mm]] (e.g. /set_time 15:30+3).
                   /show_configs - show current configurations
                 """);
 

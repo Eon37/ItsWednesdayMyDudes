@@ -60,8 +60,16 @@ public class Bot extends TelegramLongPollingBot {
         }
         botService.getStats(chatId, this);
       } else if (message.startsWith("/manual_delete_chat")) {
+        if (!adminChats.contains(update.getMessage().getChatId().toString())) {
+          botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
+          return;
+        }
         botService.deleteChatById(Long.parseLong(message.split(" ")[1]));
       } else if (message.startsWith("/manual_delete_stickers")) {
+        if (!adminChats.contains(update.getMessage().getChatId().toString())) {
+          botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);
+          return;
+        }
         botService.deleteStickerById(Long.parseLong(message.split(" ")[1]));
       } else {
         botService.sendMessage(new SendMessage(String.valueOf(chatId), "Unknown command"), this);

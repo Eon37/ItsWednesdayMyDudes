@@ -32,23 +32,32 @@ public class BotService {
     logger.info("Chat added");
     SendMessage sendMessage = new SendMessage(String.valueOf(chatId),
             """
-                  Welcome to its wednesday my dudes bot. On wednesdays it will remind you, that it is already wednesday my dude. 
-                  Here are the list of commands:
-                  /set_time - set the time to receive messages. Optionally you can set timezone. Default is 10:00 UTC+0. Format: [h]h:mm[+|-[h]h[:mm]] (e.g. /set_time 15:30+3).
-                  /show_configs - show current configurations
-                """);
+                    Welcome to its wednesday my dudes bot!
+                    On wednesdays it will remind you that it is already wednesday my dude.
+                    
+                    Here is the list of commands:
+                    /show_configs - show current configurations
+                    /set_time - set the time to receive messages. Optionally you can set timezone. Default is 10:00 UTC+0. Format: [h]h:mm[+|-[h]h[:mm]] (e.g. /set_time 15:30+3).
+                    """);
 
     sendMessage(sendMessage, bot);
   }
+
   public void deleteChatById(Long id) {
     chatService.deleteById(id);
   }
+
   public void deleteStickerById(Long id) {
     stickerService.deleteById(id);
   }
 
   public void setTimeToSendMessages(long chatId, String time, Bot bot) {
     SendMessage errorMessage = new SendMessage(String.valueOf(chatId), INCORRECT_FORMAT_MESSAGE);
+    if (time == null) {
+      logger.error("Error while setting time");
+      sendMessage(errorMessage, bot);
+      return;
+    }
 
     Matcher matcher = INPUT_TIME_PATTERN.matcher(time);
     if (matcher.matches()) {
@@ -74,10 +83,24 @@ public class BotService {
     }
   }
 
-  public void showConfigsList(long chatId, Bot bot) {
+  public void showConfigsList(long chatId, boolean isAdminChat, Bot bot) {
     Chat chat = chatService.getByChatId(chatId);
 
-    SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "List of configs:\nTime to receive messages: " + chat.getTimeToSend());
+    String message = "List of configs:\nTime to receive messages: " + chat.getTimeToSend();
+
+    if (isAdminChat) {
+      message = message + """
+              \n
+              Maintenance endpoints info:
+              /add_sticker (stickerId)
+              /test_send
+              /stats
+              /manual_delete_chat (chatId)
+              /manual_delete_stickers (stickerId)
+              """;
+    }
+
+    SendMessage sendMessage = new SendMessage(String.valueOf(chatId), message);
     sendMessage(sendMessage, bot);
   }
 
